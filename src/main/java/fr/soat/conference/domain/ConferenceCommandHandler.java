@@ -41,14 +41,11 @@ public class ConferenceCommandHandler {
     @Command
     public void showStatistics(PrintStream printStream) {
         Collection<ConferenceName> conferences = statisticsRepository.getConferences();
-        printStream.println("conferece;booking_rate;incomes");
+        printStream.println("conferece;incomes");
         for (ConferenceName conferenceName  : conferences) {
             Conference conference = conferenceRepository.load(conferenceName);
-            Integer bookingNumber = statisticsRepository.getBookingNumber(conferenceName);
-            String bookingRate = Math.round(100 * bookingNumber / conference.getSeats().size()) + "%";
             Integer incomes = statisticsRepository.getIncomes(conferenceName);
-            printStream.println(String.format("%s;%s;%s", conferenceName.getName(), bookingRate, incomes));
+            printStream.println(String.format("%s;%s", conferenceName.getName(), incomes));
         }
     }
-
 }

@@ -29,15 +29,4 @@ public class StatisticsUpdateManager {
         statisticsRepository.increaseIncomes(conferenceName, amount);
     }
 
-    @EventListener
-    public void on(SeatBooked seatBooked) {
-        statisticsRepository.increaseBookingNumber(seatBooked.getConferenceName());
-    }
-
-    @EventListener
-    public void on(SeatReleased seatReleased) {
-        statisticsRepository.decreaseBookingNumber(seatReleased.getConferenceName());
-    }
-
-
 }

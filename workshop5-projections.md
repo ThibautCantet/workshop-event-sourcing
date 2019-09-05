@@ -7,8 +7,8 @@ Event-sourcing and projections
 
 The 2 architectural patterns work fine together ! 
 As the source of truth is the event store, which can be considered as the "write model",
-it's very easy to subscribe to any kind of business event to build another "read model", a *projection* of the data data, as we could do in CQRS... 
-This *projection can then be stored in any other kind of data storage system (RDMS, noSQL DB, Kafka topic...)
+it's very easy to subscribe to any kind of business event to build a *projection* of the data (indeed another "read model"), as we could do in CQRS... 
+This *projection* can then be stored in any other kind of data storage system (RDMS, noSQL DB, Kafka, whatever...)
 
 # Real time statistics on conferences
  
@@ -16,6 +16,7 @@ To illustrate this, let's build the following "projection" in the previous confe
 We would like to export some real time statistics about the open conferences:
 * the **booking ratio** for each conference (booked seats / total seats)
 * the **total incomes** by conference (sum of booked seats x price)  
+
 |      conference name                     | booking ratio | total incomes |
 |:-----------------------------------------|---------------|--------------:|
 | why tests ares not an option             |      33%      |      110E     |    
@@ -46,7 +47,7 @@ As you can see `StatisticsUpdateManager` is an event handler, subscribing to `Pa
 ```
 When a payment occurs, the statistics *total incomes* is updated with the new payment. 
 
-On the read side, check out the `showStatistics` of the `ConferenceCommandHandler`:
+On the read side, check out the `showStatistics` command of the `ConferenceCommandHandler`:
 
 ```
     @Command
@@ -64,7 +65,7 @@ On the read side, check out the `showStatistics` of the `ConferenceCommandHandle
 ### Booking raiio
 
 Now, let's add the *booking ratio* in the statistics !
-* add some event handlers in the `StatisticsUpdateManager` to catch any seat booking event, end store the seat booking number with the `StatisticsRepository` ()
-* add in the `showStatistics` command the read and computation of book ratio in the statistics report !
+* add some event handlers in the `StatisticsUpdateManager` to catch any seat booking event, end store the seat booking number with the `StatisticsRepository`.
+* add in the `showStatistics` command the read and computation of book ratio in the statistics report.
 
 After that, `ConferenceBookingStatisticsTest` should pass green !

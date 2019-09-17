@@ -52,7 +52,7 @@ public class ConferenceBookingStatisticsTest {
     public void should_update_conference_statistics_successfully() throws UnsupportedEncodingException {
         // Given
         AccountId myAccountId = AccountId.next();
-        Account myAccount = new Account(myAccountId).credit(100);
+        Account myAccount = new Account(myAccountId).credit(1000);
         accountRepository.save(myAccount);
 
         AccountId yourAccountId = AccountId.next();
@@ -63,20 +63,27 @@ public class ConferenceBookingStatisticsTest {
         Conference conferenceStrategy = new Conference(conferenceStrategyName).open(10, 5);
         conferenceRepository.save(conferenceStrategy);
 
-        ConferenceName conferenceMondeName = ConferenceName.name("10 astuces pour devenir maitre du monde. La 4ème va vous étonner ");
+        ConferenceName conferenceMondeName = ConferenceName.name("10 astuces pour devenir maitre du monde. La 4ème va vous étonner");
         Conference conferenceMonde = new Conference(conferenceMondeName).open(10, 7);
         conferenceRepository.save(conferenceMonde);
+
+        ConferenceName conferenceAquaPoneyName = ConferenceName.name("Pratiquer l'aqua-poney à la maison");
+        Conference conferenceAquaPoney = new Conference(conferenceAquaPoneyName).open(20, 200);
+        conferenceRepository.save(conferenceAquaPoney);
 
         // When
         conferenceCommandHandler.requestOrder(conferenceStrategyName, myAccountId);
         conferenceCommandHandler.requestOrder(conferenceMondeName, myAccountId);
+        conferenceCommandHandler.requestOrder(conferenceAquaPoneyName, myAccountId);
         conferenceCommandHandler.requestOrder(conferenceMondeName, yourAccountId);
+        conferenceCommandHandler.requestOrder(conferenceAquaPoneyName, yourAccountId);
 
         // Then
         String output = execute(conferenceCommandHandler::getStatistics);
         assertThat(output).isEqualTo("conferece;booking_rate;incomes\n" +
                 "La stratégie de l'echec;10%;5\n" +
-                "10 astuces pour devenir maitre du monde. La 4ème va vous étonner ;20%;14\n");
+                "10 astuces pour devenir maitre du monde. La 4ème va vous étonner;20%;14\n" +
+                "Pratiquer l'aqua-poney à la maison;5%;200\n");
     }
 
     private String execute(Consumer<PrintStream> func) throws UnsupportedEncodingException {

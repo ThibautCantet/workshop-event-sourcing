@@ -47,11 +47,11 @@ As you can see `StatisticsUpdateManager` is an event handler, subscribing to `Pa
 ```
 When a payment occurs, the statistics *total incomes* is updated with the new payment. 
 
-On the read side, check out the `showStatistics` command of the `ConferenceCommandHandler`:
+On the read side, check out the `getStatistics` query of the `ConferenceCommandHandler`:
 
 ```
-    @Command
-    public void showStatistics(PrintStream printStream) {
+    @Query
+    public void getStatistics(PrintStream printStream) {
         Collection<ConferenceName> conferences = statisticsRepository.getConferences();
         printStream.println("conferece;incomes");
         for (ConferenceName conferenceName  : conferences) {
@@ -66,6 +66,6 @@ On the read side, check out the `showStatistics` command of the `ConferenceComma
 
 Now, let's add the *booking ratio* in the statistics !
 * add some event handlers in the `StatisticsUpdateManager` to catch any seat booking event, end store the seat booking number with the `StatisticsRepository`.
-* add in the `showStatistics` command the read and computation of book ratio in the statistics report.
+* add in the `getStatistics` query the read and computation of book ratio in the statistics report.
 
 After that, `ConferenceBookingStatisticsTest` should pass green !

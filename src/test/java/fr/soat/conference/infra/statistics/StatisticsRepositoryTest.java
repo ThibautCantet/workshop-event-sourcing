@@ -7,10 +7,10 @@ import org.junit.Test;
 
 public class StatisticsRepositoryTest {
 
-    StatisticsRepository statisticsRepository = new StatisticsRepository();
-    ConferenceName exoConference = ConferenceName.name("exoconference");
-    ConferenceName endoConference = ConferenceName.name("endoConference");
-    ConferenceName unknownConference = ConferenceName.name("unknownConference");
+    private StatisticsRepository statisticsRepository = new StatisticsRepository();
+    private ConferenceName exoConference = ConferenceName.name("exoconference");
+    private ConferenceName endoConference = ConferenceName.name("endoConference");
+    private ConferenceName unknownConference = ConferenceName.name("unknownConference");
 
     @Before
     public void setUp() throws Exception {

@@ -73,7 +73,7 @@ public class ConferenceBookingStatisticsTest {
         conferenceCommandHandler.requestOrder(conferenceMondeName, yourAccountId);
 
         // Then
-        String output = execute(conferenceCommandHandler::showStatistics);
+        String output = execute(conferenceCommandHandler::getStatistics);
         assertThat(output).isEqualTo("conferece;booking_rate;incomes\n" +
                 "La stratégie de l'echec;10%;5\n" +
                 "10 astuces pour devenir maitre du monde. La 4ème va vous étonner ;20%;14\n");

@@ -10,6 +10,7 @@ import fr.soat.conference.infra.booking.ConferenceRepository;
 import fr.soat.conference.infra.order.OrderRepository;
 import fr.soat.conference.infra.statistics.StatisticsRepository;
 import fr.soat.eventsourcing.api.Command;
+import fr.soat.eventsourcing.api.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,8 +39,8 @@ public class ConferenceCommandHandler {
         return order.getId();
     }
 
-    @Command
-    public void showStatistics(PrintStream printStream) {
+    @Query
+    public void getStatistics(PrintStream printStream) {
         Collection<ConferenceName> conferences = statisticsRepository.getConferences();
         printStream.println("conferece;booking_rate;incomes");
         for (ConferenceName conferenceName  : conferences) {

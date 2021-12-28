@@ -9,7 +9,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Getter
 @ToString(of = "accountId")
-public abstract class AccountEvent implements Event {
+public abstract sealed class AccountEvent implements Event permits AccountClosed, AccountDeposited, AccountOpened, AccountWithdrawn {
 
     private final AccountId accountId;
 

@@ -6,7 +6,7 @@ import lombok.ToString;
 
 @EqualsAndHashCode
 @ToString(callSuper = true)
-public class AccountWithdrawn extends AccountEvent {
+public final class AccountWithdrawn extends AccountEvent {
 
     @Getter
     private final Integer amount;

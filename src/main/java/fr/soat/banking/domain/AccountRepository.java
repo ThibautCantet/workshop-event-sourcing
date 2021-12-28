@@ -17,23 +17,31 @@ public class AccountRepository {
     }
 
     public void save(Account account) {
-        //FIXME
         // 1. retrieve all the pending changes recorded from the account aggregate
         // 2. invoke eventStore to save these changes (events)
-        throw new RuntimeException("implement me !");
+        eventStore.store(account.getId(), account.getChanges());
     }
 
     public Account load(AccountId accountId) {
         // 1. load from eventStore all the past events for the given account
-        //FIXME
-        List<AccountEvent> events = null;
+        List<AccountEvent> events = eventStore.loadEvents(accountId).stream().map(event -> (AccountEvent) event).toList();
         // 2. hydrate Account to retrieve the current state
         return hydrate(accountId, events);
     }
 
     private static Account hydrate(AccountId accountId, List<AccountEvent> events) {
-        //FIXME apply all events on a new Account to retrieve the current state
-        throw new RuntimeException("implement me !");
+        // apply all events on a new Account to retrieve the current state
+        Account account = new Account(accountId);
+        for (AccountEvent accountEvent : events) {
+            switch (accountEvent) {
+                case AccountOpened e -> account.apply(e);
+                case AccountClosed e -> account.apply(e);
+                case AccountDeposited e -> account.apply(e);
+                case AccountWithdrawn e -> account.apply(e);
+                default -> throw new IllegalStateException("Unexpected value: " + accountEvent);
+            }
+        }
+        return account;
     }
 
     private List<AccountEvent> asAccountEvents(List<Event> events) {

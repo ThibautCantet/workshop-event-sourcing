@@ -7,7 +7,7 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString(callSuper = true)
 @Getter
-public class AccountOpened extends AccountEvent {
+public final class AccountOpened extends AccountEvent {
 
     private final String owner;
     private final String number;

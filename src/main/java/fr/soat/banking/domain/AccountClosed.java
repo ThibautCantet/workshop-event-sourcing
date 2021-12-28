@@ -5,7 +5,7 @@ import lombok.ToString;
 
 @EqualsAndHashCode
 @ToString(callSuper = true)
-public class AccountClosed extends AccountEvent {
+public final class AccountClosed extends AccountEvent {
 
     public AccountClosed(AccountId accountId) {
         super(accountId);

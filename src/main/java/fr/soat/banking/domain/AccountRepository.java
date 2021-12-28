@@ -34,6 +34,6 @@ public class AccountRepository {
     }
 
     private List<AccountEvent> asAccountEvents(List<Event> events) {
-        return events.stream().map(event -> (AccountEvent) event).collect(toList());
+        return events.stream().map(AccountEvent.class::cast).collect(toList());
     }
 }

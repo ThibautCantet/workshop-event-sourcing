@@ -112,16 +112,21 @@ public class Account extends AggregateRoot<AccountId> {
             throw new UnsupportedOperationException("Can not transfer from a " + status + " account");
         }
 
+        if (receiverAccount.status.equals(CLOSED)) {
+            apply(new TransferRequested(getId(), receiverAccount.getId(), amount));
+            apply(new TransferRequestAborted(getId(), receiverAccount.getId(), amount));
+            receiverAccount.apply(new CreditRequestRefused(getId(), receiverAccount.getId(), amount));
+            return this;
+        }
+
         if (amount <= getBalance()) {
             // transfer authorized
             apply(new TransferRequested(getId(), receiverAccount.getId(), amount));
             receiverAccount.credit(this, amount);
         } else {
-            //FIXME when funds are insufficient...
             // apply a TransferRequestRefused evolution on sender account
-            throw new RuntimeException("implement me !");
+            apply(new TransferRequestRefused(getId(), receiverAccount.getId(), amount));
         }
-
         return this;
     }
 
@@ -137,14 +142,22 @@ public class Account extends AggregateRoot<AccountId> {
 
     @DecisionFunction
     public void credit(Account senderAccount, int amount) {
-        //FIXME expected implementation:
         // IF the receiver account is OPEN
         // 1. apply a FundCredited evolution on receiver account
-        // 2. make debit() decition on sender account
+        // 2. make debit() decision on sender account
+        if (status == OPEN) {
+            FundCredited event = new FundCredited(getId(), senderAccount.getId(), amount);
+            apply(event);
+            senderAccount.debit(getId(), amount);
+        }
         // ELSE
         // 1. apply a CreditRequestRefused evolution on receiver account
         // 2. make abortTransferRequest() decision on sender account
-        throw new RuntimeException("implement me !");
+        else {
+            CreditRequestRefused event = new CreditRequestRefused(getId(), senderAccount.getId(), amount);
+            apply(event);
+            abortTransferRequest(senderAccount.getId(), amount);
+        }
     }
 
     @EvolutionFunction
@@ -159,7 +172,7 @@ public class Account extends AggregateRoot<AccountId> {
     }
 
     @DecisionFunction
-    public void abortTransferRequest(AccountId receiverAccountId, int amount ) {
+    public void abortTransferRequest(AccountId receiverAccountId, int amount) {
         apply(new TransferRequestAborted(getId(), receiverAccountId, amount));
     }
 

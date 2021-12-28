@@ -87,7 +87,7 @@ public class BankCommandsTest {
                         tuple(TransferRequested.class),
                         tuple(TransferRequestAborted.class)
                 );
-        assertThat(bobAccount.getBalance()).isEqualTo(0);
+        assertThat(bobAccount.getBalance()).isZero();
         assertThat(bobAccount.getChanges())
                 .extracting(event -> tuple(event.getClass()))
                 .containsExactly(

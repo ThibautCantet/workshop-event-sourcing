@@ -37,6 +37,6 @@ public class ConferenceRepository {
     }
 
     private List<ConferenceEvent> asRoomEvents(List<Event> events) {
-        return events.stream().map(event -> (ConferenceEvent) event).collect(toList());
+        return events.stream().map(ConferenceEvent.class::cast).collect(toList());
     }
 }

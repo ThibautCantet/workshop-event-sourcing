@@ -37,6 +37,6 @@ public class OrderRepository {
     }
 
     private List<OrderEvent> asOrderEvents(List<Event> events) {
-        return events.stream().map(event -> (OrderEvent) event).collect(toList());
+        return events.stream().map(OrderEvent.class::cast).collect(toList());
     }
 }

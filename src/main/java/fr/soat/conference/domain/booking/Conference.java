@@ -9,11 +9,13 @@ import lombok.Getter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 import static fr.soat.conference.domain.booking.ConferenceStatus.*;
+import static java.util.Optional.*;
 
 @Getter
-public class Conference extends AggregateRoot<ConferenceName>  {
+public class Conference extends AggregateRoot<ConferenceName> {
 
     private final List<Seat> seats = new ArrayList<>();
     private final List<Seat> availableSeats = new ArrayList<>();
@@ -33,36 +35,53 @@ public class Conference extends AggregateRoot<ConferenceName>  {
 
     @EvolutionFunction
     public void apply(ConferenceOpened conferenceOpened) {
-        //FIXME
         // given the input event, init the conference state
-        throw new RuntimeException("implement me !");
+        this.status = OPEN;
+        this.seatPrice = conferenceOpened.getSeatPrice();
+        IntStream.range(0, conferenceOpened.getPlaces())
+                .forEach(this::initializeSeats);
+        recordChange(conferenceOpened);
+    }
+
+    private void initializeSeats(int seatNumber) {
+        Seat seat = new Seat(seatNumber + 1);
+        this.seats.add(seatNumber, seat);
+        this.availableSeats.add(seatNumber, seat);
     }
 
     @DecisionFunction
     public Optional<Seat> bookSeat(OrderId orderId) {
-        //FIXME
         // if some seats are available, we should remove one seat from available seats and return it
         // The possible expected output events are:
         // - SeatBookingRequestRefused
         // - SeatBooked
-        throw new RuntimeException("implement me !");
+        if (!availableSeats.isEmpty()) {
+            Seat bookedSeat = availableSeats.remove(0);
+            apply(new SeatBooked(getId(), orderId, bookedSeat));
+            return of(bookedSeat);
+        } else {
+            apply(new SeatBookingRequestRefused(getId(), orderId));
+            return empty();
+        }
     }
 
     @DecisionFunction
     public void cancelBooking(Seat seat) {
-        //FIXME
         // The expected output event is:
         // - SeatReleased
-        throw new RuntimeException("implement me !");
+        apply(new SeatReleased(getId(), seat));
     }
 
     @EvolutionFunction
     public void apply(SeatBooked conferenceSeatBooked) {
-        //FIXME
         // given the input event:
         // - update the remaining available seats
         // - update the conference status if needed
-        throw new RuntimeException("implement me !");
+        recordChange(conferenceSeatBooked);
+        if (availableSeats.isEmpty()) {
+            status = FULL;
+        }
+        this.availableSeats.remove(conferenceSeatBooked.getSeat());
     }
 
     @EvolutionFunction
@@ -72,9 +91,10 @@ public class Conference extends AggregateRoot<ConferenceName>  {
 
     @EvolutionFunction
     public void apply(SeatReleased seatReleased) {
-        //FIXME
         // similar to apply(SeatBooked)
-        throw new RuntimeException("implement me !");
+        recordChange(seatReleased);
+        this.availableSeats.add(seatReleased.getSeat());
+        status = OPEN;
     }
 
     @Override

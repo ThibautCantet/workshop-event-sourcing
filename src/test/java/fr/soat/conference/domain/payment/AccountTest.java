@@ -4,7 +4,7 @@ import fr.soat.conference.domain.order.OrderId;
 import fr.soat.conference.infra.payment.AccountRepository;
 import fr.soat.eventsourcing.impl.InMemoryEventStore;
 import fr.soat.eventsourcing.impl.NOOPEventPublisher;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;

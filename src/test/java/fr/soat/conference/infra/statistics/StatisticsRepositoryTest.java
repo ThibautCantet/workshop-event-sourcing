@@ -2,8 +2,8 @@ package fr.soat.conference.infra.statistics;
 
 import fr.soat.conference.domain.booking.ConferenceName;
 import org.assertj.core.api.Assertions;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class StatisticsRepositoryTest {
 
@@ -12,7 +12,7 @@ public class StatisticsRepositoryTest {
     private ConferenceName endoConference = ConferenceName.name("endoConference");
     private ConferenceName unknownConference = ConferenceName.name("unknownConference");
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         statisticsRepository.clear();
     }

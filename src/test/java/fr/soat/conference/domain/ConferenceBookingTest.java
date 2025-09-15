@@ -11,17 +11,16 @@ import fr.soat.conference.infra.booking.ConferenceRepository;
 import fr.soat.conference.infra.order.OrderRepository;
 import fr.soat.conference.infra.payment.AccountRepository;
 import fr.soat.eventsourcing.api.EventStore;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import static fr.soat.conference.domain.order.OrderStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
+@SpringBootTest
 @ContextConfiguration(classes = ConferenceConfiguration.class)
 public class ConferenceBookingTest {
 
@@ -40,7 +39,7 @@ public class ConferenceBookingTest {
     @Autowired
     EventStore eventStore;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         eventStore.clear();
     }

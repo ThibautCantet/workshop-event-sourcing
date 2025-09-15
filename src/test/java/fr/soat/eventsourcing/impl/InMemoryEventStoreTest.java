@@ -1,13 +1,8 @@
 package fr.soat.eventsourcing.impl;
 
 import fr.soat.conference.application.configuration.ConferenceConfiguration;
-import org.junit.Ignore;
-import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@Ignore
-@RunWith(SpringRunner.class)
 @ContextConfiguration(classes = ConferenceConfiguration.class)
 public class InMemoryEventStoreTest {
 
@@ -15,7 +10,7 @@ public class InMemoryEventStoreTest {
 //    EventStore eventStore;
 //    private OrderId orderId = OrderId.next();
 //
-//    @Before
+//    @BeforeEach
 //    public void setUp() throws Exception {
 //        eventStore.clear();
 //    }

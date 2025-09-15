@@ -133,7 +133,7 @@ public class Account extends AggregateRoot<AccountId> {
     }
 
     @DecisionFunction
-    public void credit(AccountId sourceAccountId, int amount) {
+    void credit(AccountId sourceAccountId, int amount) {
         if (getStatus() == OPEN) {
             apply(new FundCredited(getId(), sourceAccountId, amount));
         } else {
@@ -148,27 +148,27 @@ public class Account extends AggregateRoot<AccountId> {
     }
 
     @EvolutionFunction
-    public void apply(CreditRequestRefused event) {
+    void apply(CreditRequestRefused event) {
         recordChange(event);
     }
 
     @DecisionFunction
-    public void abortTransferRequest(AccountId targetAccountId, int amount ) {
+    void abortTransferRequest(AccountId targetAccountId, int amount ) {
         apply(new TransferRequestAborted(getId(), targetAccountId, amount));
     }
 
     @EvolutionFunction
-    public void apply(TransferRequestAborted transferRequestAborted) {
+    void apply(TransferRequestAborted transferRequestAborted) {
         recordChange(transferRequestAborted);
     }
 
     @DecisionFunction
-    public void debit(AccountId receiverAccountId, Integer amount) {
+    void debit(AccountId receiverAccountId, Integer amount) {
         apply(new FundDebited(getId(), receiverAccountId, amount));
     }
 
     @EvolutionFunction
-    public void apply(FundDebited event) {
+    void apply(FundDebited event) {
         this.balance -= event.getAmount();
         recordChange(event);
     }

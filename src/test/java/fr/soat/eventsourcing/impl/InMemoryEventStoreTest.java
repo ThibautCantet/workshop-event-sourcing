@@ -1,16 +1,13 @@
 package fr.soat.eventsourcing.impl;
 
-import fr.soat.banking.application.configuration.BankConfig;
 import fr.soat.banking.domain.*;
 import fr.soat.eventsourcing.api.Event;
 import fr.soat.eventsourcing.api.EventConcurrentUpdateException;
 import fr.soat.eventsourcing.api.EventStore;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Collections;
 import java.util.List;
@@ -22,15 +19,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.util.Lists.newArrayList;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(classes = BankConfig.class)
+@SpringBootTest
 public class InMemoryEventStoreTest {
 
     @Autowired
     EventStore eventStore;
     private AccountId accountId = AccountId.next();
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         eventStore.clear();
     }

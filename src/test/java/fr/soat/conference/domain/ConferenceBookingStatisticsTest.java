@@ -9,10 +9,10 @@ import fr.soat.conference.infra.booking.ConferenceRepository;
 import fr.soat.conference.infra.payment.AccountRepository;
 import fr.soat.conference.infra.statistics.StatisticsRepository;
 import fr.soat.eventsourcing.api.EventStore;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -23,8 +23,7 @@ import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(classes = ConferenceConfiguration.class)
+@SpringBootTest
 public class ConferenceBookingStatisticsTest {
 
     @Autowired
@@ -42,7 +41,7 @@ public class ConferenceBookingStatisticsTest {
     @Autowired
     private StatisticsRepository statisticsRepository;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         eventStore.clear();
         statisticsRepository.clear();

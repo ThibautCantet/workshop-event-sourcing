@@ -1,8 +1,11 @@
 package fr.soat.conference.domain;
 
+import fr.soat.conference.domain.booking.Conference;
 import fr.soat.conference.domain.booking.SeatBooked;
 import fr.soat.conference.domain.booking.SeatBookingRequestRefused;
+import fr.soat.conference.domain.order.Order;
 import fr.soat.conference.domain.order.OrderRequested;
+import fr.soat.conference.domain.payment.Account;
 import fr.soat.conference.domain.payment.PaymentAccepted;
 import fr.soat.conference.domain.payment.PaymentRefused;
 import fr.soat.conference.infra.booking.ConferenceRepository;
@@ -29,44 +32,48 @@ public class ConferenceBookingProcessManager {
     @EventListener
     public void on(OrderRequested orderRequested) {
         log.info("consuming {}", orderRequested.getClass().getSimpleName());
-        //FIXME
-        // expected to bookSeat() on the target conference
-        throw new RuntimeException("implement me !");
+        Conference conference = conferenceRepository.load(orderRequested.getConferenceName());
+        Order order = orderRepository.load(orderRequested.getOrderId());
+        conference.bookSeat(order.getId());
+        conferenceRepository.save(conference);
     }
 
     @EventListener
     public void on(SeatBooked seatBooked) {
         log.info("consuming {}", seatBooked.getClass().getSimpleName());
-        //FIXME
-        // expected to
-        // 1. assign the seat to the order
-        // 2. request a payment on the customer account
-        throw new RuntimeException("implement me !");
+        Order order = orderRepository.load(seatBooked.getOrderId());
+        Account account = accountRepository.load(order.getAccountId());
+        Conference conference = conferenceRepository.load(order.getConferenceName());
+        account.requestPayment(conference.getSeatPrice(), order.getId());
+        order.assign(seatBooked.getSeat());
+        orderRepository.save(order);
+        accountRepository.save(account);
     }
 
     @EventListener
     public void on(SeatBookingRequestRefused seatBookingRequestRefused) {
         log.info("consuming {}", seatBookingRequestRefused.getClass().getSimpleName());
-        //FIXME
-        // expected to propagate the seat booking request failure to the order through order.failSeatBooking()
-        throw new RuntimeException("implement me !");
+        Order order = orderRepository.load(seatBookingRequestRefused.getOrderId());
+        order.failSeatBooking();
+        orderRepository.save(order);
     }
 
     @EventListener
     public void on(PaymentAccepted paymentAccepted) {
         log.info("consuming {}", paymentAccepted.getClass().getSimpleName());
-        //FIXME
-        // expected to confirm the payment to the order through order.confirmPayment()
-        throw new RuntimeException("implement me !");
+        Order order = orderRepository.load(paymentAccepted.getOrderId());
+        order.confirmPayment(paymentAccepted.getPaymentReference());
+        orderRepository.save(order);
     }
 
     @EventListener
     public void on(PaymentRefused paymentRefused) {
         log.info("consuming {}", paymentRefused.getClass().getSimpleName());
-        //FIXME
-        // expected to:
-        // 1. propagate the payment refuse to the order through a order.refusePayment()
-        // 2. cancel the booking on the conferenace to release the seat, through conference.cancelBooking()
-        throw new RuntimeException("implement me !");
+        Order order = orderRepository.load(paymentRefused.getOrderId());
+        order.refusePayment();
+        Conference conference = conferenceRepository.load(order.getConferenceName());
+        conference.cancelBooking(order.getSeat());
+        orderRepository.save(order);
+        conferenceRepository.save(conference);
     }
 }

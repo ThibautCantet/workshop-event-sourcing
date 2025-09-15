@@ -34,12 +34,12 @@ public class TransferProcessManager  {
     @EventListener
     public void on(FundCredited fundCredited) {
         log.info("consuming {}", fundCredited.getClass().getSimpleName());
-        //FIXME
-        // when triggered on a FundCredited
         // 1. reload the sender Account
+        Account account = accountRepository.load(fundCredited.getSenderAccountId());
         // 2. make debit() decision on sender account
+        account.debit(fundCredited.getAccountId(), fundCredited.getAmount());
         // 3. save the sender Account
-        throw new RuntimeException("implement me !");
+        accountRepository.save(account);
     }
 
 }

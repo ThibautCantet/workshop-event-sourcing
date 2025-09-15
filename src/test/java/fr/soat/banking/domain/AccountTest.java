@@ -1,6 +1,6 @@
 package fr.soat.banking.domain;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static fr.soat.banking.domain.AccountStatus.*;
 import static org.assertj.core.api.Assertions.*;

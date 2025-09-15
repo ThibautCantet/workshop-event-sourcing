@@ -70,20 +70,34 @@ public class Account extends AggregateRoot<AccountId> {
 
     @DecisionFunction
     public Account deposit(Integer amount) {
-        //FIXME
         // 1. apply the business logic: check the account is valid to make a deposit (expected to be an open account)
+        if (status != OPEN) {
+            throw new UnsupportedOperationException("Can not deposit on a " + status + " account");
+        }
         // 2. invoke the evolution function passing a new AccountDeposited event containing the mutation description (delta on the balance)
-        throw new RuntimeException("implement me !");
+        AccountDeposited event = new AccountDeposited(getId(), amount);
+        apply(event);
+        return this;
     }
 
     @DecisionFunction
     public Account withdraw(Integer amount) {
-        //FIXME
         // 1. apply the business logic: check:
         // - the account is valid to make a deposit (expected to be an open account)
         // - the withdraw amount is not greater than the current balance !
+        if (status != OPEN) {
+            throw new UnsupportedOperationException("Can not withdraw from a " + status + " account");
+        }
         // 2. invoke the evolution function passing a new AccountWithdrawn event containing the mutation description (delta on the balance)
-        throw new RuntimeException("implement me !");
+        if (amount < 0) {
+            throw new IllegalArgumentException("Can not withdraw a negative amount");
+        }
+        if (amount > balance) {
+            throw new InsufficientFundsException(String.format("Withdrawal of %s can not be applied with balance of %s", amount, balance));
+        }
+        AccountWithdrawn event = new AccountWithdrawn(getId(), amount);
+        apply(event);
+        return this;
     }
 
     @DecisionFunction

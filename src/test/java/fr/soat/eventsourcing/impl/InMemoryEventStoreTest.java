@@ -4,8 +4,8 @@ import fr.soat.banking.domain.*;
 import fr.soat.eventsourcing.api.Event;
 import fr.soat.eventsourcing.api.EventConcurrentUpdateException;
 import fr.soat.eventsourcing.api.EventStore;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.List;
@@ -22,7 +22,7 @@ public class InMemoryEventStoreTest {
     EventStore eventStore = new InMemoryEventStore();
     private AccountId accountId = AccountId.next();
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         eventStore.clear();
     }

@@ -1,11 +1,10 @@
 package fr.soat.banking.domain;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static fr.soat.banking.domain.AccountStatus.*;
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.Assert.assertTrue;
 
 public class AccountTest {
 

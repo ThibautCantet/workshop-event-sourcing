@@ -2,7 +2,7 @@ package fr.soat.banking.domain;
 
 import fr.soat.eventsourcing.impl.InMemoryEventStore;
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static fr.soat.banking.domain.AccountStatus.CLOSED;
 

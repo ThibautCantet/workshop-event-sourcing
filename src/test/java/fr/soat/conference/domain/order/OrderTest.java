@@ -6,7 +6,7 @@ import fr.soat.conference.domain.payment.*;
 import fr.soat.conference.infra.order.OrderRepository;
 import fr.soat.eventsourcing.impl.InMemoryEventStore;
 import fr.soat.eventsourcing.impl.NOOPEventPublisher;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static fr.soat.conference.domain.order.OrderStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;

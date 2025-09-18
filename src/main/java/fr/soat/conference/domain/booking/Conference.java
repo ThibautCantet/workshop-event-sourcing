@@ -32,7 +32,7 @@ public class Conference extends AggregateRoot<ConferenceName>  {
     }
 
     @EvolutionFunction
-    public void apply(ConferenceOpened conferenceOpened) {
+    void apply(ConferenceOpened conferenceOpened) {
         //FIXME
         // given the input event, init the conference state
         throw new RuntimeException("implement me !");
@@ -57,7 +57,7 @@ public class Conference extends AggregateRoot<ConferenceName>  {
     }
 
     @EvolutionFunction
-    public void apply(SeatBooked conferenceSeatBooked) {
+    void apply(SeatBooked conferenceSeatBooked) {
         //FIXME
         // given the input event:
         // - update the remaining available seats
@@ -66,12 +66,12 @@ public class Conference extends AggregateRoot<ConferenceName>  {
     }
 
     @EvolutionFunction
-    public void apply(SeatBookingRequestRefused seatBookingRequestRefused) {
+    void apply(SeatBookingRequestRefused seatBookingRequestRefused) {
         recordChange(seatBookingRequestRefused);
     }
 
     @EvolutionFunction
-    public void apply(SeatReleased seatReleased) {
+    void apply(SeatReleased seatReleased) {
         //FIXME
         // similar to apply(SeatBooked)
         throw new RuntimeException("implement me !");

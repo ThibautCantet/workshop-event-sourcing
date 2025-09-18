@@ -22,7 +22,7 @@ public class Account extends AggregateRoot<AccountId>  {
     }
 
     @EvolutionFunction
-    public void apply(AccountCredited accountCredited) {
+    void apply(AccountCredited accountCredited) {
         this.balance += accountCredited.getAmount();
         recordChange(accountCredited);
     }
@@ -39,18 +39,18 @@ public class Account extends AggregateRoot<AccountId>  {
     }
 
     @EvolutionFunction
-    public void apply(PaymentRequested paymentRequested) {
+    void apply(PaymentRequested paymentRequested) {
         recordChange(paymentRequested);
     }
 
     @EvolutionFunction
-    public void apply(PaymentAccepted paymentAccepted) {
+    void apply(PaymentAccepted paymentAccepted) {
         this.balance -= paymentAccepted.getAmount();
         recordChange(paymentAccepted);
     }
 
     @EvolutionFunction
-    public void apply(PaymentRefused paymentRefused) {
+    void apply(PaymentRefused paymentRefused) {
         recordChange(paymentRefused);
     }
 

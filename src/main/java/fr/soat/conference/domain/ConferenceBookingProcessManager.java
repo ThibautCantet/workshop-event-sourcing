@@ -1,18 +1,14 @@
 package fr.soat.conference.domain;
 
-import fr.soat.conference.domain.booking.Conference;
 import fr.soat.conference.domain.booking.SeatBooked;
 import fr.soat.conference.domain.booking.SeatBookingRequestRefused;
-import fr.soat.conference.domain.order.Order;
 import fr.soat.conference.domain.order.OrderRequested;
-import fr.soat.conference.domain.payment.Account;
 import fr.soat.conference.domain.payment.PaymentAccepted;
 import fr.soat.conference.domain.payment.PaymentRefused;
 import fr.soat.conference.infra.booking.ConferenceRepository;
 import fr.soat.conference.infra.order.OrderRepository;
 import fr.soat.conference.infra.payment.AccountRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +20,6 @@ public class ConferenceBookingProcessManager {
     private final ConferenceRepository conferenceRepository;
     private final AccountRepository accountRepository;
 
-    @Autowired
     public ConferenceBookingProcessManager(OrderRepository orderRepository, ConferenceRepository conferenceRepository, AccountRepository accountRepository) {
         this.orderRepository = orderRepository;
         this.conferenceRepository = conferenceRepository;

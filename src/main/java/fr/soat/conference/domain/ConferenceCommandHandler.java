@@ -7,7 +7,6 @@ import fr.soat.conference.domain.order.OrderId;
 import fr.soat.conference.domain.payment.AccountId;
 import fr.soat.conference.infra.order.OrderRepository;
 import fr.soat.eventsourcing.api.Command;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,7 +14,6 @@ public class ConferenceCommandHandler {
 
     private final OrderRepository repository;
 
-    @Autowired
     public ConferenceCommandHandler(OrderRepository repository) {
         this.repository = repository;
     }

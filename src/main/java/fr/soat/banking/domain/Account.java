@@ -1,12 +1,12 @@
 package fr.soat.banking.domain;
 
 
+import java.util.UUID;
+
 import fr.soat.eventsourcing.api.AggregateRoot;
 import fr.soat.eventsourcing.api.DecisionFunction;
 import fr.soat.eventsourcing.api.EvolutionFunction;
 import lombok.Getter;
-
-import java.util.UUID;
 
 import static fr.soat.banking.domain.AccountStatus.*;
 
@@ -135,11 +135,13 @@ public class Account extends AggregateRoot<AccountId> {
 
     @DecisionFunction
     public void credit(Account senderAccount, int amount) {
-        if (getStatus() == OPEN) {
-            apply(new FundCredited(getId(), senderAccount.getId(), amount));
+        if (status == OPEN) {
+            FundCredited fundCredited = new FundCredited(getId(), senderAccount.getId(), amount);
             senderAccount.debit(getId(), amount);
+            apply(fundCredited);
         } else {
-            apply(new CreditRequestRefused(getId(), senderAccount.getId(), amount));
+            CreditRequestRefused creditRequestRefused = new CreditRequestRefused(senderAccount.getId(), getId(), amount);
+            apply(creditRequestRefused);
             senderAccount.abortTransferRequest(getId(), amount);
         }
     }
@@ -156,7 +158,7 @@ public class Account extends AggregateRoot<AccountId> {
     }
 
     @DecisionFunction
-    public void abortTransferRequest(AccountId receiverAccountId, int amount ) {
+    public void abortTransferRequest(AccountId receiverAccountId, int amount) {
         apply(new TransferRequestAborted(getId(), receiverAccountId, amount));
     }
 

@@ -15,7 +15,7 @@ public class Account extends AggregateRoot<AccountId> {
 
     private String owner;
     private String number;
-    private Integer balance = 0;
+    private int balance = 0;
     private AccountStatus status = NEW;
 
     public Account(AccountId accountId) {
@@ -73,7 +73,12 @@ public class Account extends AggregateRoot<AccountId> {
         //FIXME
         // 1. apply the business logic: check the account is valid to make a deposit (expected to be an open account)
         // 2. invoke the evolution function passing a new AccountDeposited event containing the mutation description (delta on the balance)
-        throw new RuntimeException("implement me !");
+        if (status == OPEN) {
+            AccountDeposited event = new AccountDeposited(getId(), amount);
+            apply(event);
+            return this;
+        }
+        throw new UnsupportedOperationException("Can't make a deposit on a new or closed account !");
     }
 
     @DecisionFunction
@@ -83,7 +88,15 @@ public class Account extends AggregateRoot<AccountId> {
         // - the account is valid to make a deposit (expected to be an open account)
         // - the withdraw amount is not greater than the current balance !
         // 2. invoke the evolution function passing a new AccountWithdrawn event containing the mutation description (delta on the balance)
-        throw new RuntimeException("implement me !");
+        if (status == OPEN) {
+            if (amount > balance) {
+                throw new InsufficientFundsException("Withdrawal of " + amount + " can not be applied with balance of " + balance);
+            }
+            AccountWithdrawn event = new AccountWithdrawn(getId(), amount);
+            apply(event);
+            return this;
+        }
+        throw new UnsupportedOperationException("Can't withdraw on new or closed account, must be opened !");
     }
 
     @DecisionFunction
